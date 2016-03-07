@@ -1,0 +1,16 @@
+.jumbotron
+  .container
+    %h1 Miru
+    %p ひげ とか ささいのgistを見るやつ
+
+.container
+  .row
+    - @members.each do |member|
+      .col-md-3.col-sm-6
+        .page-header
+          %h2.h3
+            = member.username
+        .github-activity
+          - member.public_feed.take(5).each do |feed|
+            .entry
+              = feed
