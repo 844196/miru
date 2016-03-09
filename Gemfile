@@ -3,6 +3,7 @@ source :rubygems
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'haml'
+gem 'sass'
 gem 'nokogiri'
 
 group :development do
