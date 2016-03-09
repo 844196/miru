@@ -1,13 +1,11 @@
-require 'ostruct'
 require 'open-uri'
 require 'nokogiri'
 
 class GitHubUser
-  attr_reader :username, :profile
+  attr_reader :username
 
   def initialize(username)
     @username = username
-    fetch_profile
   end
 
   def public_activity
@@ -34,18 +32,6 @@ class GitHubUser
   end
 
   private
-
-  def fetch_profile
-    return @profile if instance_variable_defined?(:@profile)
-
-    doc = Nokogiri::HTML.parse(open(profile_url))
-    prf = doc.css('ul.vcard-details li').each_with_object({}) do |element, return_hash|
-      key = element.css('svg').first.values.find {|v| v =~ /octicon/ }.gsub(/.* octicon-(.+)/, '\1').to_sym
-      val = element.inner_text
-      return_hash[key] = val
-    end
-    @profile = OpenStruct.new(prf)
-  end
 
   def public_feed_url
     "https://github.com/#{self.username}.atom"
