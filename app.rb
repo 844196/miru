@@ -7,9 +7,12 @@ require_relative 'app/github_user'
 register Sinatra::ConfigFile
 config_file 'config.yml'
 
-get '/' do
+before do
   @members = settings.members.map do |name|
     GitHubUser.new(name)
   end
+end
+
+get '/' do
   haml :index
 end
