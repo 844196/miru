@@ -18,14 +18,13 @@ class GitHubUser
   end
 
   def contributions_calendar
-    doc = Nokogiri::HTML.parse(open(profile_url))
-    cal = doc.css('div.js-calendar-graph').tap do |html|
-      html.css('svg.js-calendar-graph-svg').tap do |svg|
-        width, height = svg.attribute('width'), svg.attribute('height')
-        svg.attr('viewBox', "0 0 #{width} #{height}")
-        svg.attr('style', "max-width: #{width}")
-        svg.remove_attr('width')
-        svg.remove_attr('height')
+    cal = Nokogiri::HTML.parse(open(contributions_calendar_svg)).tap do |html|
+      html.css('svg.js-calendar-graph-svg').instance_eval do |svg|
+        width, height = attribute('width'), attribute('height')
+        attr('viewBox', "0 0 #{width} #{height}")
+        attr('style', "max-width: #{width}")
+        remove_attr('width')
+        remove_attr('height')
       end
     end
   end
@@ -54,5 +53,9 @@ class GitHubUser
 
   def profile_url
     "https://github.com/#{self.username}"
+  end
+
+  def contributions_calendar_svg
+    "https://github.com/users/#{self.username}/contributions"
   end
 end
